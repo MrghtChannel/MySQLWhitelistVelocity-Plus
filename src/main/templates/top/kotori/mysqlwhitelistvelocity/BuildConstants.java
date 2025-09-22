@@ -1,4 +1,4 @@
-package top.kotori.mysqlwhitelistvelocity;
+package top.mrghtchannel.mysqlwhitelistvelocity;
 
 // The constants are replaced before compilation
 public class BuildConstants {

@@ -20,12 +20,12 @@ dependencies {
 }
 
 shadowJar {
-    relocate 'org.bstats', 'top.kotori.mysqlwhitelistvelocity'
-    relocate 'org.mariadb.jdbc', 'top.kotori.mysqlwhitelistvelocity.libs.mariadb'
+    relocate 'org.bstats', 'top.mrghtchannel.mysqlwhitelistvelocity'
+    relocate 'org.mariadb.jdbc', 'top.mrghtchannel.mysqlwhitelistvelocity.libs.mariadb'
 }
 
-group = 'top.kotori'
-version = '1.2.0'
+group = 'top.mrghtchannel'
+version = '1.1.0'
 description = 'Velocity plugin for managing a Minecraft whitelist using MySQL'
 
 def targetJavaVersion = 17

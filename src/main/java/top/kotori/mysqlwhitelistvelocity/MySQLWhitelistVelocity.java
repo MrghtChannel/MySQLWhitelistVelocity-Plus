@@ -1,4 +1,4 @@
-package top.kotori.mysqlwhitelistvelocity;
+package top.mrghtchannel.mysqlwhitelistvelocity;
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
@@ -52,7 +52,7 @@ public class MySQLWhitelistVelocity {
         this.metricsFactory = metricsFactory;
         // Load the MariaDB JDBC driver
         try {
-            Class.forName("top.kotori.mysqlwhitelistvelocity.libs.mariadb.Driver");
+            Class.forName("top.mrghtchannel.mysqlwhitelistvelocity.libs.mariadb.Driver");
             logger.info("MariaDB JDBC driver loaded successfully");
         } catch (ClassNotFoundException e) {
             logger.error("Failed to load MariaDB JDBC driver", e);
