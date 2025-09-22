@@ -1,0 +1,70 @@
+plugins {
+    id 'java'
+    id 'eclipse'
+    id "org.jetbrains.gradle.plugin.idea-ext" version "1.0.1"
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+repositories {
+    maven {
+        name = 'papermc'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+}
+
+dependencies {
+    compileOnly 'com.velocitypowered:velocity-api:3.3.0-SNAPSHOT'
+    annotationProcessor 'com.velocitypowered:velocity-api:3.3.0-SNAPSHOT'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:3.5.6'
+    implementation 'org.bstats:bstats-velocity:3.0.2'
+}
+
+shadowJar {
+    relocate 'org.bstats', 'top.kotori.mysqlwhitelistvelocity'
+    relocate 'org.mariadb.jdbc', 'top.kotori.mysqlwhitelistvelocity.libs.mariadb'
+}
+
+group = 'top.kotori'
+version = '1.2.0'
+description = 'Velocity plugin for managing a Minecraft whitelist using MySQL'
+
+def targetJavaVersion = 17
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release.set(targetJavaVersion)
+    }
+}
+
+def templateSource = file('src/main/templates')
+def templateDest = layout.buildDirectory.dir('generated/sources/templates')
+def generateTemplates = tasks.register('generateTemplates', Copy) { task ->
+    def props = [
+            'id'         : "mysqlwhitelistvelocity",
+            'name'       : project.name,
+            'version'    : project.version,
+            'link'       : "https://github.com/MrghtChannel/MySQLWhitelistVelocity-Plus",
+            'description': project.description,
+            'authors'    : "mrghtchannel"
+    ]
+    task.inputs.properties props
+
+    task.from templateSource
+    task.into templateDest
+    task.expand props
+}
+
+sourceSets.main.java.srcDir(generateTemplates.map { it.outputs })
+
+rootProject.idea.project.settings.taskTriggers.afterSync generateTemplates
+project.eclipse.synchronizationTasks(generateTemplates)
